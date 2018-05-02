@@ -1,14 +1,30 @@
 import { IRoutes, IHooks, IGenericHooks } from "spiel-build";
+import { VNode } from "ultradom";
+
+export interface IState {
+    [key: string]: any;
+}
+
+export type TView = (state: IState) => VNode<any>;
+
+export interface IPage {
+    state: IState;
+    view: TView;
+}
 
 export interface IUltraRoutes extends IRoutes{
     /** 
      * Assigns default props state for this route  
      */
     defaultProps?: any;
+    /** Singleton Page component class
+     * @see <a href="_helpers_interfaces_.ipage.html">IPage</a>
+     */
+    page: IPage;
     /**
      * Adds page childreen
      */
-    routes?: Array<{[Route in keyof IRoutes] : any}>;
+    routes?: Array<{[Route in keyof IUltraRoutes] : any}>;
 }
 
 export interface IConfigRouter {
