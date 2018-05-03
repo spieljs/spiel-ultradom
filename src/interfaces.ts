@@ -68,3 +68,9 @@ export interface IConfigRouter {
      */
     root?: string;
 }
+
+export interface features {
+    defaultProps: any;
+    checkQuery: (query: string) => string,
+    checkState: (query: string) => string | object,
+}

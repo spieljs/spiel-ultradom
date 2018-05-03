@@ -1,40 +1,45 @@
 import {Router, TBuild} from "spiel-build";
 import { render } from "ultradom";
 import {h} from "./diff";
-import { IConfigRouter, IUltraRoutes, IState } from "./interfaces";
+import { IConfigRouter, IUltraRoutes, IState, features, features } from "./interfaces";
 import Navigo = require("navigo");
 
 export class Ultrabuilder {
     public build!: TBuild;
     public router!: Navigo;
-    private root!: string;
 
     public setRouter(configRouter: IConfigRouter) {
         const builder = new Router(configRouter.rootPath, configRouter.useHash, configRouter.hash);
         this.build = builder.build;
         this.router = builder.router;
-        this.root = configRouter.root;
+        const element = this.createRootElement(configRouter.root);
+
+        const features = {
+            defaultProps: configRouter.defaultProps,
+            checkQuery: this.checkQuery,
+            checkState: this.checkState
+        };
 
         if (configRouter.genericHooks) {
             this.router.hooks(configRouter.genericHooks);
         }
 
         if (configRouter.routes) {
-            this.build(configRouter.routes, this.setRender)
+            this.build(configRouter.routes, this.setRender, element)
         }
     }
 
-    private createRootElement() {
-        const rootElement = document.getElementById(this.root);
+    private createRootElement(root: string) {
+        const rootElement = document.getElementById(root);
         const node = h("div", {});
         let element;
         if (!rootElement) {
             const elm = document.createElement("div");
-            elm.setAttribute("id", this.root);
+            elm.setAttribute("id", root);
             document.body.appendChild(elm);
-            element = render(node, document.getElementById(this.root));
+            element = render(node, document.getElementById(root));
         } else {
-            element = render(node, document.getElementById(this.root));
+            element = render(node, document.getElementById(root));
         }
 
         return element;
@@ -63,16 +68,16 @@ export class Ultrabuilder {
     }
 
     private setRender(route: IUltraRoutes, params: object, query: string,
-        rootElement?: Element, defaultProps?: any) {
+        rootElement?: Element, features?: features) {
         const page = route.page;
         const state: IState = {};
         if (query) {
-            state.lastState = this.checkState(query);
+            state.lastState = features.checkState(query);
         }
         Object.assign(state, page.state);
         state.params = params;
-        state.query = this.checkQuery(query);
-        state.defaultProps = route.defaultProps || defaultProps;
+        state.query = features.checkQuery(query);
+        state.defaultProps = route.defaultProps || features.defaultProps;
         page(page.view, state, rootElement);
     }
 }
