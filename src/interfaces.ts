@@ -5,7 +5,10 @@ export interface IState {
     [key: string]: any;
 }
 
-export type TView = (state: IState) => VNode<any>;
+export type THandler = ((params: any, query: string) => void) |
+{ as: string; uses(params: any, query: string): void };
+
+export type TView = (state: any) => VNode<any>;
 
 export interface IPage {
     state: IState;

@@ -1,17 +1,20 @@
 import {Router, TBuild} from "spiel-build";
 import { render } from "ultradom";
 import {h} from "./diff";
-import { IConfigRouter, IUltraRoutes, IState, features, features } from "./interfaces";
+import {change} from "./change";
+import { IConfigRouter, IUltraRoutes, IState, features} from "./interfaces";
 import Navigo = require("navigo");
 
-export class Ultrabuilder {
+export class UltraBuilder {
     public build!: TBuild;
     public router!: Navigo;
+    private configRouter!: IConfigRouter;
 
     public setRouter(configRouter: IConfigRouter) {
         const builder = new Router(configRouter.rootPath, configRouter.useHash, configRouter.hash);
         this.build = builder.build;
         this.router = builder.router;
+        this.configRouter = configRouter;
         const element = this.createRootElement(configRouter.root);
 
         const features = {
@@ -26,6 +29,23 @@ export class Ultrabuilder {
 
         if (configRouter.routes) {
             this.build(configRouter.routes, this.setRender, element)
+        }
+    }
+
+    public go(path: string, state?: object | null, absolute?: boolean) {
+        if (state) {
+            path = `${(path.indexOf("?") !== -1) ?
+                `${path}&` :
+                `${path}?`}state=${encodeURIComponent(JSON.stringify(state))}`;
+        }
+    
+        this.router.navigate(path, absolute);
+    }
+
+    public resolve(currentUrl?: string) {
+        this.router.resolve(currentUrl);
+        if (!this.router.lastRouteResolved().url) {
+            this.checkDefault();
         }
     }
 
@@ -78,6 +98,29 @@ export class Ultrabuilder {
         state.params = params;
         state.query = features.checkQuery(query);
         state.defaultProps = route.defaultProps || features.defaultProps;
-        page(page.view, state, rootElement);
+
+        change(page.view, state, rootElement);
+    }
+
+    private checkDefault() {
+        if(this.configRouter.default) {
+            this.go(this.configRouter.default);
+        } else {
+            this.go("/");
+        }
+    }
+
+    private checkNotFound() {
+        this.router.notFound(() => {
+            if (this.configRouter.notFound && this.configRouter.notFoundPath &&
+                ((window.location.hash && window.location.hash !== this.configRouter.hash && this.configRouter.useHash) ||
+                (window.location.pathname !== "/" && !this.configRouter.useHash))) {
+                this.go(this.configRouter.notFoundPath);
+            } else {
+                this.checkDefault();
+            }
+        }, this.configRouter.notFoundHooks);
     }
 }
+
+export const ultraBuilder = new UltraBuilder();

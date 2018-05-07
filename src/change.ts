@@ -9,7 +9,7 @@ let element: Element;
  * @param state The state object property of the page
  * @param rootElement The root element
  */
-export function page(view: TView, state: IState, rootElement?: Element | null): Element {
+export function change(view: TView, state: IState, rootElement?: Element | null): Element {
     if(!element) {
         element = rootElement;
     }
