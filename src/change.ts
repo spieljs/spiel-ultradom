@@ -10,8 +10,8 @@ let element: Element;
  * @param rootElement The root element
  */
 export function change(view: TView, state: IState, rootElement?: Element | null): Element {
-    if(!element) {
-        element = rootElement;
+    if (!element) {
+        element = rootElement || document.body;
     }
     render(view(state), element);
     return element;

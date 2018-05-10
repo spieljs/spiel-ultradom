@@ -15,7 +15,7 @@ export class UltraBuilder {
         this.build = builder.build;
         this.router = builder.router;
         this.configRouter = configRouter;
-        const element = this.createRootElement(configRouter.root || "app");
+        const element = this.createRootElement(configRouter.root);
 
         const features: IFeatures = {
             checkQuery: this.checkQuery,
@@ -52,13 +52,23 @@ export class UltraBuilder {
         }
     }
 
-    private createRootElement(root: string) {
-        const rootElement = document.getElementById(root);
-        const node = h("div", {});
-        const elm = document.createElement("div");
-        elm.setAttribute("id", root);
-        document.body.appendChild(elm);
-        return document.getElementById(root) || document.body;
+    private createRootElement(root?: string) {
+        let rootElement;
+        if (root) {
+            rootElement = document.getElementById(root);
+        } else {
+            return document.body;
+        }
+
+        if (rootElement) {
+            return rootElement;
+        } else {
+            const node = h("div", {});
+            const elm = document.createElement("div");
+            elm.setAttribute("id", root);
+            document.body.appendChild(elm);
+            return document.getElementById(root) || document.body;
+        }
     }
 
     private checkQuery(query: string) {

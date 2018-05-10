@@ -1,5 +1,5 @@
-import { VNode, Children } from "ultradom";
-import { IPage, h } from "../../src";
+import { Children, VNode } from "ultradom";
+import { h, IPage } from "../../src";
 
 interface IShow {
     value: string;
@@ -10,14 +10,14 @@ export const componentTest: IPage = {
         text: "This is a component",
     },
 
-    view: (state: {test: string}) => {
+    view: (state: {text: string}) => {
         return (
-            <Show value={state.test}>
-                <span>And this its child</span>
+            <Show value={state.text}>
+                <span>And this is its child</span>
             </Show>
         );
-    }
-}
+    },
+};
 
 function Show({value}: IShow, children: Children) {
     return (
