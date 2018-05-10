@@ -1,4 +1,4 @@
-import { IRoutes, IHooks, IGenericHooks } from "spiel-build";
+import { IGenericHooks, IHooks, IRoutes } from "spiel-build";
 import { VNode } from "ultradom";
 
 export interface IState {
@@ -15,9 +15,9 @@ export interface IPage {
     view: TView;
 }
 
-export interface IUltraRoutes extends IRoutes{
-    /** 
-     * Assigns default props state for this route  
+export interface IUltraRoutes extends IRoutes {
+    /**
+     * Assigns default props state for this route
      */
     defaultProps?: any;
     /** Singleton Page component class
@@ -72,8 +72,8 @@ export interface IConfigRouter {
     root?: string;
 }
 
-export interface features {
+export interface IFeatures {
     defaultProps: any;
-    checkQuery: (query: string) => string,
-    checkState: (query: string) => string | object,
+    checkQuery: (query: string) => string;
+    checkState: (query: string) => string | object;
 }

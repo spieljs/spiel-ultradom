@@ -1,9 +1,9 @@
+import Navigo = require("navigo");
 import {Router, TBuild} from "spiel-build";
 import { render } from "ultradom";
-import {h} from "./diff";
 import {change} from "./change";
-import { IConfigRouter, IUltraRoutes, IState, features} from "./interfaces";
-import Navigo = require("navigo");
+import {h} from "./diff";
+import { IConfigRouter, IFeatures, IState, IUltraRoutes} from "./interfaces";
 
 export class UltraBuilder {
     public build!: TBuild;
@@ -15,12 +15,12 @@ export class UltraBuilder {
         this.build = builder.build;
         this.router = builder.router;
         this.configRouter = configRouter;
-        const element = this.createRootElement(configRouter.root);
+        const element = this.createRootElement(configRouter.root || "app");
 
-        const features = {
-            defaultProps: configRouter.defaultProps,
+        const features: IFeatures = {
             checkQuery: this.checkQuery,
-            checkState: this.checkState
+            checkState: this.checkState,
+            defaultProps: configRouter.defaultProps,
         };
 
         if (configRouter.genericHooks) {
@@ -28,8 +28,11 @@ export class UltraBuilder {
         }
 
         if (configRouter.routes) {
-            this.build(configRouter.routes, this.setRender, element)
+            this.build(configRouter.routes, this.setRender, null , element, features);
         }
+
+        this.checkNotFound();
+        return this;
     }
 
     public go(path: string, state?: object | null, absolute?: boolean) {
@@ -38,7 +41,7 @@ export class UltraBuilder {
                 `${path}&` :
                 `${path}?`}state=${encodeURIComponent(JSON.stringify(state))}`;
         }
-    
+
         this.router.navigate(path, absolute);
     }
 
@@ -52,17 +55,10 @@ export class UltraBuilder {
     private createRootElement(root: string) {
         const rootElement = document.getElementById(root);
         const node = h("div", {});
-        let element;
-        if (!rootElement) {
-            const elm = document.createElement("div");
-            elm.setAttribute("id", root);
-            document.body.appendChild(elm);
-            element = render(node, document.getElementById(root));
-        } else {
-            element = render(node, document.getElementById(root));
-        }
-
-        return element;
+        const elm = document.createElement("div");
+        elm.setAttribute("id", root);
+        document.body.appendChild(elm);
+        return document.getElementById(root) || document.body;
     }
 
     private checkQuery(query: string) {
@@ -88,22 +84,23 @@ export class UltraBuilder {
     }
 
     private setRender(route: IUltraRoutes, params: object, query: string,
-        rootElement?: Element, features?: features) {
+                      rootElement?: Element, features?: IFeatures) {
         const page = route.page;
         const state: IState = {};
-        if (query) {
-            state.lastState = features.checkState(query);
-        }
         Object.assign(state, page.state);
         state.params = params;
-        state.query = features.checkQuery(query);
-        state.defaultProps = route.defaultProps || features.defaultProps;
+
+        if (query && features) {
+            state.lastState = features.checkState(query);
+            state.query = features.checkQuery(query);
+            state.defaultProps = route.defaultProps || features.defaultProps;
+        }
 
         change(page.view, state, rootElement);
     }
 
     private checkDefault() {
-        if(this.configRouter.default) {
+        if (this.configRouter.default) {
             this.go(this.configRouter.default);
         } else {
             this.go("/");
@@ -113,7 +110,8 @@ export class UltraBuilder {
     private checkNotFound() {
         this.router.notFound(() => {
             if (this.configRouter.notFound && this.configRouter.notFoundPath &&
-                ((window.location.hash && window.location.hash !== this.configRouter.hash && this.configRouter.useHash) ||
+                ((window.location.hash && window.location.hash !== this.configRouter.hash
+                    && this.configRouter.useHash) ||
                 (window.location.pathname !== "/" && !this.configRouter.useHash))) {
                 this.go(this.configRouter.notFoundPath);
             } else {
