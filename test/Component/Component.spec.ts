@@ -1,6 +1,6 @@
 import { assert, expect } from "chai";
-import { h } from "../../src";
 import { VNode} from "ultradom";
+import { h } from "../../src";
 
 import {componentTest} from "./mocks";
 
