@@ -8,6 +8,8 @@
 		"module": "commonjs",
 		"strict": true,
 		"emitDecoratorMetadata": true,
+		"esModuleInterop": true,
+		"noEmit": false,
 		"experimentalDecorators": true,
 		"declaration": true,
 		"jsx": "react",

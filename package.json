@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "spiel-build": "^1.0.3",
-    "ultradom": "3.2.2"
+    "ultradom": "3.3.0"
   },
   "devDependencies": {
     "@types/chai": "^4.1.3",
