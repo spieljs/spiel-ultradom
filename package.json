@@ -15,6 +15,7 @@
     "docs": "gulp typedoc"
   },
   "dependencies": {
+    "karma-firefox-launcher": "^1.1.0",
     "spiel-build": "^1.0.3",
     "ultradom": "3.3.0"
   },

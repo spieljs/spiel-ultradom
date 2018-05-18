@@ -103,7 +103,12 @@ export class UltraBuilder {
         if (query && features) {
             state.lastState = features.checkState(query);
             state.query = features.checkQuery(query);
-            state.defaultProps = route.defaultProps || features.defaultProps;
+        }
+
+        if (route.defaultProps) {
+            state.defaultProps = route.defaultProps;
+        } else if (features) {
+            state.defaultProps = features.defaultProps;
         }
 
         change(page.view, state, rootElement);
