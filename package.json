@@ -1,6 +1,6 @@
 {
   "name": "spiel-ultradom",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Builder router for Ultradom",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
@@ -10,11 +10,12 @@
   "private": false,
   "scripts": {
     "test": "./node_modules/.bin/karma start",
-    "build": "./node_modules/./bin/tsc",
+    "build": "./node_modules/.bin/tsc",
     "lint": "./node_modules/.bin/tslint 'src/**/*.ts'",
     "docs": "gulp typedoc"
   },
   "dependencies": {
+    "karma-chrome-launcher": "^2.2.0",
     "karma-firefox-launcher": "^1.1.0",
     "spiel-build": "^1.0.3",
     "ultradom": "3.3.0"
