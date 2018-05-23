@@ -5,11 +5,18 @@ import {change} from "./change";
 import {h} from "./diff";
 import { IConfigRouter, IFeatures, IState, IUltraRoutes} from "./interfaces";
 
+/**
+ * Router builder class for ultradom
+ */
 export class UltraBuilder {
     public build!: TBuild;
     public router!: Navigo;
     private configRouter!: IConfigRouter;
 
+    /**
+     * Set router across the config object
+     * @param configRouter config object to set the router
+     */
     public setRouter(configRouter: IConfigRouter) {
         const builder = new Router(configRouter.rootPath, configRouter.useHash, configRouter.hash);
         this.build = builder.build;
@@ -35,6 +42,12 @@ export class UltraBuilder {
         return this;
     }
 
+    /**
+     * go to another path of the router
+     * @param path path to go
+     * @param state pass the current state to the new path
+     * @param absolute if path is absolute
+     */
     public go(path: string, state?: object | null, absolute?: boolean) {
         if (state) {
             path = `${(path.indexOf("?") !== -1) ?
@@ -45,6 +58,11 @@ export class UltraBuilder {
         this.router.navigate(path, absolute);
     }
 
+    /**
+     * Active the router
+     * @param currentUrl if currentURL is provided then the method tries resolving
+     * the registered routes to that URL and not window.location.href
+     */
     public resolve(currentUrl?: string) {
         this.router.resolve(currentUrl);
         if (!this.router.lastRouteResolved().url) {

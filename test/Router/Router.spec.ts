@@ -213,18 +213,22 @@ describe("Router", () => {
 
   describe("manual", () => {
     before(() => {
-      ultraBuilder.setRouter({ rootPath: "http://localhost:9876/" });
+      ultraBuilder.setRouter({ rootPath: "http://localhost:9876/",
+                               useHash: true });
     });
 
     it("has to add a route", (done) => {
+      ultraBuilder.router.pause();
       ultraBuilder.router.on("/child/:number", (params) => {
         const state: {params: any} = { params: {}};
         Object.assign(state, testPage2.state);
         state.params = params;
         change(testPage2.view, state);
       });
+      ultraBuilder.router.resume();
       ultraBuilder.resolve();
       ultraBuilder.go("/child/6");
+
       setTimeout(() => {
         const title = document.getElementsByTagName("h1")[0];
         if (title) {
@@ -237,7 +241,7 @@ describe("Router", () => {
     it("has to create a default route", (done) => {
       ultraBuilder.router.pause();
       ultraBuilder.router.on(() => {
-        document.body.appendChild(change(testPage1.view, testPage1.state));
+        change(testPage1.view, testPage1.state);
       });
       ultraBuilder.router.resume();
       ultraBuilder.resolve();

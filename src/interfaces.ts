@@ -10,6 +10,9 @@ export type THandler = ((params: any, query: string) => void) |
 
 export type TView = (state: any) => VNode<any>;
 
+/**
+ * Page object
+ */
 export interface IPage {
     state: IState;
     view: TView;

@@ -38,7 +38,7 @@ export const configSettings: IConfigRouter = {
             hooks,
             page: testPage2,
             path: "/child/:number",
-            routers: [{
+            routes: [{
                 alias: "grandchild",
                 page: testPage3,
                 path: "/child2/:word",
