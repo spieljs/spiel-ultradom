@@ -1,6 +1,6 @@
 # SPIEL ULTRADOM
 
-Router builder for [ultradom](https://github.com/jorgebucaran/ultradom) using [Navigo](https://github.com/krasimir/navigo)
+Router builder for [Ultradom](https://github.com/jorgebucaran/ultradom) using [Navigo](https://github.com/krasimir/navigo)
 
 ## Api documentation
 
