@@ -1,4 +1,4 @@
-import { Children, VNode } from "ultradom";
+import { Children } from "ultradom";
 import { h, IPage } from "../../src";
 
 interface IShow {
