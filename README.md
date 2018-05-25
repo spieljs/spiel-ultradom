@@ -2,6 +2,10 @@
 
 Router builder for [ultradom](https://github.com/jorgebucaran/ultradom) using [Navigo](https://github.com/krasimir/navigo)
 
+## Api documentation
+
+* [Spiel Ultradom API](https://spieljs.github.io/spiel-ultradom)
+
 ## How use it
 
 Create a page views object
