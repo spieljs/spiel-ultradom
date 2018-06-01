@@ -199,10 +199,14 @@ describe("Component", () => {
 });
 ```
 
+# Example
+
+[Simple Spiel Ultradom Example](https://github.com/spiel-examples/simple-spiel-ultradom-example)
+
 ## Run Spiel Ultradom test
 
 `yarn test` or `npm test`
 
 ## License
 
-Spiel Ultradom is MIT licensed. See [license](README.md)
+Spiel Ultradom is MIT licensed. See [license](https://github.com/spiel-examples/simple-spiel-ultradom-example/blob/master/README.md)

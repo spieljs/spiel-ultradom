@@ -203,6 +203,10 @@ describe("Component", () => {
 });
 ```
 
+# Example
+
+[Simple Spiel Ultradom Example](https://github.com/spiel-examples/simple-spiel-ultradom-example)
+
 ## Run Spiel Ultradom test
 
 `yarn test` or `npm test`
